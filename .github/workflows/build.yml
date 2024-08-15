@@ -45,10 +45,15 @@ jobs:
           type=raw,value=latest,enable={{is_default_branch}}
 
     - name: Download ${{ matrix['tool'] }}
-      run: wget "$(cat .github/${{ matrix['tool'] }}.url)" -O tool.zip
+      run: wget "$(cat .github/${{ matrix['tool'] }}.url)" -qO tool.zip
 
     - name: Unzip ${{ matrix['tool'] }}
       run: unzip tool.zip && mv ${{ matrix['tool'] }}-* tool
+
+    - name: Uppercase Tool Name
+      run: echo "TOOL_NAME_UPPER=${TOOL_NAME^^}" >>${GITHUB_ENV}
+      env:
+        TOOL_NAME: ${{ matrix['tool'] }}
 
     - name: Build
       uses: docker/build-push-action@v6
@@ -56,7 +61,11 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm/v7,linux/arm64
         tags: ${{ steps.meta.outputs.tags }}
-        build-args: "TOOL_NAME=${{ matrix['tool'] }}"
+        build-args: |
+          TOOL_NAME=${{ matrix['tool'] }}
+          TOOL_NAME_UPPER=${{ env.TOOL_NAME_UPPER }}
 
     - name: Test
       run: docker compose up --wait
+      env:
+        TOOL_NAME: ${{ matrix['tool'] }}
