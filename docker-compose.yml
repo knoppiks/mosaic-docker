@@ -1,0 +1,29 @@
+services:
+  ${TOOL_NAME}-db:
+    image: mysql:9.0.1@sha256:d8df069848906979fd7511db00dc22efeb0a33a990d87c3c6d3fcdafd6fc6123
+    command: --max_allowed_packet=20M --default-time-zone=Europe/Berlin
+    volumes:
+    - ./${TOOL_NAME}/sqls:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TOOL_NAME: ${TOOL_NAME}
+    healthcheck:
+      test: [ "CMD", "/usr/bin/mysqladmin", "ping", "-h", "localhost", "-u${TOOL_NAME}_user", "-p${TOOL_NAME}_password" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+
+  ${TOOL_NAME}:
+    image: ghcr.io/knoppiks/mosaic-${TOOL_NAME}:${IMAGE_TAG:-latest}
+    depends_on:
+      ${TOOL_NAME}-db:
+        condition: service_healthy
+    environment:
+      TOOL_NAME: ${TOOL_NAME}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/${TOOL_NAME}/${TOOL_NAME}Service?wsdl" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
