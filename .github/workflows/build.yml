@@ -46,6 +46,11 @@ jobs:
           type=match,pattern=${{ matrix['tool'] }}-v(\d+.\d+.\d+)(-k\d+)?,group=1
           type=match,pattern=${{ matrix['tool'] }}-v(\d+.\d+).\d+(-k\d+)?,group=1
           type=raw,value=latest,enable={{is_default_branch}}
+        labels: |
+          maintainer=Jonas Wagner<jwagner@knoppiks.de>
+          org.opencontainers.image.description=${{ matrix['tool'] }} Container Image from MOSAIC Project. See https://www.ths-greifswald.de/projekte/mosaic-projekt/.
+          org.opencontainers.image.title=mosaic-${{ matrix['tool'] }}
+          org.opencontainers.image.url=https://ghcr.io/knoppiks/mosaic-${{ matrix['tool'] }}
 
     - name: Download ${{ matrix['tool'] }}
       run: wget "$(cat .github/${{ matrix['tool'] }}.url)" -qO tool.zip
