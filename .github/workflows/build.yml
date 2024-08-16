@@ -60,7 +60,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        platforms: linux/amd64,linux/arm/v7,linux/arm64
+        load: true
         tags: ${{ steps.meta.outputs.tags }}
         build-args: |
           TOOL_NAME=${{ matrix['tool'] }}
@@ -68,7 +68,7 @@ jobs:
 
     - name: Test Startup
       run: |
-        docker compose pull tool-db
+        docker compose pull -q tool-db
         docker compose up --wait --pull never
       env:
         TOOL_NAME: ${{ matrix['tool'] }}
