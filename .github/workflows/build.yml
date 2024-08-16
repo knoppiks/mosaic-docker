@@ -48,7 +48,7 @@ jobs:
           type=raw,value=latest,enable={{is_default_branch}}
         labels: |
           maintainer=Jonas Wagner<jwagner@knoppiks.de>
-          org.opencontainers.image.description=${{ matrix['tool'] }} Container Image from MOSAIC Project. See https://www.ths-greifswald.de/projekte/mosaic-projekt/.
+          org.opencontainers.image.description=Container Image gics ${{ matrix['tool'] }} MOSAIC Project. See https://www.ths-greifswald.de/projekte/mosaic-projekt/.
           org.opencontainers.image.title=mosaic-${{ matrix['tool'] }}
           org.opencontainers.image.url=https://ghcr.io/knoppiks/mosaic-${{ matrix['tool'] }}
 
