@@ -68,7 +68,8 @@ jobs:
 
     - name: Test Startup
       run: |
-        docker compose pull -q tool-db
+        envsubst '$TOOL_NAME' <compose.tmpl.yml >compose.yml
+        docker compose pull -q ${{ matrix['tool'] }}-db
         docker compose up --wait --pull never
       env:
         TOOL_NAME: ${{ matrix['tool'] }}

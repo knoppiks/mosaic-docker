@@ -1,6 +1,3 @@
-epix/
-epix.zip
-gics/
-gics.zip
-gpas/
-gpas.zip
+tool/
+tool.zip
+compose.yml
