@@ -14,6 +14,8 @@ jobs:
       matrix:
         tool: [ "epix", "gics", "gpas" ]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -74,3 +76,9 @@ jobs:
       env:
         TOOL_NAME: ${{ matrix['tool'] }}
         IMAGE_TAG: ${{ github.sha }}
+
+    - name: Push Image
+      run: |
+        echo "${TAGS}" | grep -v "latest" | xargs -n1 docker push
+      env:
+        TAGS: ${{ steps.meta.outputs.tags }}
