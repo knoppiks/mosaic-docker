@@ -42,9 +42,9 @@ jobs:
           ghcr.io/knoppiks/mosaic-${{ matrix['tool'] }}
         tags: |
           type=sha,format=long,prefix=
-          type=match,pattern=(\d+.\d+.\d+-k\d+)?,group=0
-          type=match,pattern=(\d+.\d+.\d+)(-k\d+)?,group=1
-          type=match,pattern=(\d+.\d+).\d+(-k\d+)?,group=1
+          type=match,pattern=${{ matrix['tool'] }}-v(\d+.\d+.\d+-k\d+)?,group=1
+          type=match,pattern=${{ matrix['tool'] }}-v(\d+.\d+.\d+)(-k\d+)?,group=1
+          type=match,pattern=${{ matrix['tool'] }}-v(\d+.\d+).\d+(-k\d+)?,group=1
           type=raw,value=latest,enable={{is_default_branch}}
 
     - name: Download ${{ matrix['tool'] }}
@@ -64,6 +64,7 @@ jobs:
         context: .
         load: true
         tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
         build-args: |
           TOOL_NAME=${{ matrix['tool'] }}
           TOOL_NAME_UPPER=${{ env.TOOL_NAME_UPPER }}
