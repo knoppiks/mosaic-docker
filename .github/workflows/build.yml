@@ -55,7 +55,7 @@ jobs:
       run: wget "$(cat .github/${{ matrix['tool'] }}.url)" -qO tool.zip
 
     - name: Unzip ${{ matrix['tool'] }}
-      run: unzip tool.zip && mv ${{ matrix['tool'] }}-* tool
+      run: unzip -d unzip tool.zip && mv unzip/* tool
 
     - name: Uppercase Tool Name
       run: echo "TOOL_NAME_UPPER=${TOOL_NAME^^}" >>${GITHUB_ENV}
